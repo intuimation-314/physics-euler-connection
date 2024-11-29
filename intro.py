@@ -212,6 +212,89 @@ class NEqualVectors(Scene):
         self.play(FadeOut(forces), FadeOut(obj))
         self.wait(1)
 
+class MuBot(Scene):
+    def construct(self):
+        # Mu symbol as the body of the bot
+        mu = MathTex(r"\mu").scale(5).set_color(BLUE).shift(LEFT + DOWN)
+        
+        # Eyes: Create two small white circles with black pupils
+                # Eyes: Create two white ovals for the eyes
+        left_eye_white = Ellipse(width=0.3, height=0.4, color=WHITE, fill_opacity=1).shift(UP * 0.6 + LEFT * 1.25 + DOWN)
+        right_eye_white = Ellipse(width=0.3, height=0.4, color=WHITE, fill_opacity=1).shift(UP * 0.6 + LEFT * 0.65 + DOWN)
+        left_eye_pupil = Dot(point=UP * 0.6 + LEFT * 1.25 + DOWN, radius=0.1, color=BLACK)
+        right_eye_pupil = Dot(point=UP * 0.6 + LEFT * 0.65 + DOWN, radius=0.1, color=BLACK)
+        
+        # Add small circle in the middle of each pupil
+        left_eye_glint = Dot(point=UP * 0.6 + LEFT * 1.25 + DOWN, radius=0.03, color=WHITE, fill_opacity=0.8)
+        right_eye_glint = Dot(point=UP * 0.6 + LEFT * 0.65 + DOWN, radius=0.03, color=WHITE,fill_opacity=0.8)
+        
+        # Group the eyes for easy animation
+        eyes = VGroup(left_eye_white, right_eye_white, 
+                      left_eye_pupil, right_eye_pupil,
+                      left_eye_glint,right_eye_glint)
+
+        # Assemble the bot
+        mu_bot = VGroup(mu, eyes)
+
+
+        # Mouth (arc for different moods)
+        happy_mouth = Arc(radius=0.2, 
+                          start_angle= - 3* PI/4,
+                          angle= 2 * PI/4).set_color(WHITE).move_to(DOWN * 0.9 + LEFT)
+        sad_mouth = Arc(radius=0.2, start_angle= PI/4,
+                        angle= 2 *PI/4).set_color(WHITE).move_to(DOWN * 0.9 + LEFT)
+        thinking_mouth = Line(start=LEFT * 0.15 + DOWN * 0.9 + LEFT, 
+                              end=RIGHT * 0.15 + DOWN * 0.9 + LEFT).set_color(WHITE)
+        mu_bot_happy = VGroup(mu_bot,happy_mouth)
+        mu_bot_sad = VGroup(mu_bot,sad_mouth)
+        mu_bot_thinking = VGroup(mu_bot,thinking_mouth)
+        # Thinking cloud
+        cloud = SVGMobject(r"C:/Users/Sumit Sah/Downloads/thinking_cloud.svg").scale(2).set_color(WHITE).next_to(mu, UP + RIGHT)
+        cloud_text = Tex("Imagine n equal vectors", 
+                         "acting at a point")
+        cloud_text.arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR )
+        cloud_text1 = Tex("What is the sum of", 
+                          "all these vectors ?")
+        cloud_text1.arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR)
+        cloud_text2 = Tex("Symmetrical Arrangement !").scale(0.6).move_to(cloud.get_center() + 0.5*UR)
+
+        # Blinking effect using fade-in and fade-out
+        def blink():
+            return AnimationGroup(
+                FadeOut(left_eye_pupil,right_eye_pupil,
+                        left_eye_glint,right_eye_glint),
+                FadeIn(left_eye_pupil,right_eye_pupil,
+                       left_eye_glint,right_eye_glint),
+                lag_ratio=0.2,
+            )
+
+        
+        # Intro Animation
+        self.play(FadeIn(mu_bot_thinking), run_time=1.5)
+        # Thinking cloud appears
+        self.play(FadeIn(cloud), Write(cloud_text), run_time=2)
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(1)
+        
+        self.play(ReplacementTransform(cloud_text,cloud_text1))
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(1)
+        
+        self.play(ReplacementTransform(cloud_text1,cloud_text2))
+        self.play(Transform(mu_bot_thinking, mu_bot_happy), run_time=1)
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(2)
+
+       
 
 class ChargedRing(Scene):
     def construct(self):
