@@ -214,25 +214,24 @@ class EulerFormula(Scene):
         )
 
         # Add real and imaginary projections
-        real_line = DashedLine(
+        imag_line = DashedLine(
            center + radius * np.array([np.cos(theta), 0, 0]),
             center + radius * np.array([np.cos(theta), np.sin(theta), 0]),
             color=RED,
         )
-        imag_line = DashedLine(
+        real_line = DashedLine(
             center + radius * np.array([0, np.sin(theta), 0]),
             center + radius * np.array([np.cos(theta), np.sin(theta), 0]),
             color=GREEN,
         )
 
 
-
         # Add the text for the real and imaginary components
         real_label = MathTex(r"\cos(\theta)").scale(0.6).next_to(
-            real_line, RIGHT
+            real_line, UP
         )
         imag_label = MathTex(r"\sin(\theta)").scale(0.6).next_to(
-            imag_line, UP
+            imag_line, RIGHT
         )
 
         # Euler's formula text
