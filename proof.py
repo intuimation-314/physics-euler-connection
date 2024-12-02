@@ -288,4 +288,58 @@ class EulerFormula(Scene):
         self.play(Create(vectors))
         self.play(Create(vector_labels))
         self.wait(2)
+        
+        # Display equations for x_k, y_k, and v_k
+        equations = VGroup(
+            MathTex(r"\vec{\mathbf{v}}_k = \cos\left(\frac{2k\pi}{n}\right) + i\sin\left(\frac{2k\pi}{n}\right)").scale(0.7),
+            MathTex(r"e^{i\frac{2k\pi}{n}} = \cos\left(\frac{2k\pi}{n}\right) + i\sin\left(\frac{2k\pi}{n}\right)").scale(0.7),
+            MathTex(r"\sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}} = \sum_{k=0}^{n-1} \cos\left(\frac{2k\pi}{n}\right) + i\sum_{k=0}^{n-1} \sin\left(\frac{2k\pi}{n}\right)").scale(0.6),
+        ).arrange(DOWN, aligned_edge=LEFT).move_to(RIGHT * 4)
+
+        # Highlight vector labeled "k"
+        k_vector = vectors[4]  # Get the vector at index 4 (labeled "k")
+        k_end = k_vector.get_end()  # Get the end point of vector "k"
+        k_angle = TAU * 4 / n  # Angle for the "k" vector
+
+        # Projections of "k" vector
+        y_projection = DashedLine(center + radius * np.array([np.cos(k_angle), 0, 0]),
+                                center + radius * np.array([np.cos(k_angle), np.sin(k_angle), 0]),
+                                color=RED,)
+        x_projection = DashedLine(center + radius * np.array([np.cos(k_angle), np.sin(k_angle), 0]),
+            center + radius * np.array([0, np.sin(k_angle), 0]),
+            color=GREEN,)
+
+        # Animate projections
+        self.play(Create(x_projection), Create(y_projection))
+
+        # Angle arc and label
+        theta_arc = Arc(
+            radius=0.5,
+            start_angle=0,
+            angle=k_angle,
+            color=RED,
+            stroke_width=2
+        ).move_arc_center_to(center)
+        theta_label = MathTex(r"\frac{2k\pi}{n}").scale(0.7).next_to(theta_arc, RIGHT)
+
+        # Animate angle arc and label
+        self.play(Create(theta_arc), Write(theta_label))
+        self.wait(2)
+
+        # Highlight components
+        x_label = MathTex(r"Re").scale(0.6).next_to(x_projection, UP)
+        y_label = MathTex(r"Im").scale(0.6).next_to(y_projection, LEFT)
+
+        self.play(Write(x_label), Write(y_label))
+        self.wait(2)
+
+        self.play(Write(equations[0]))
+        self.wait(2)
+        self.play(Indicate(euler_formula))
+        self.play(Write(equations[1]))
+        self.wait(2)
+        self.play(Write(equations[2]))
+        self.wait(2)
+        self.play(FadeOut(*self.mobjects))
+
 
