@@ -6,13 +6,13 @@ class VectorsInPlane(Scene):
     def construct(self):
         # Number of vectors
         n = 9  # Set number of vectors to 9
-        radius = 3  # Radius of the circle
+        radius = 2  # Radius of the circle
         center = 3 * LEFT  # Center of the circle
 
         # Create axes with grids
         axes = NumberPlane(
-            x_range=[-radius - 1, radius + 1, 1],
-            y_range=[-radius - 1, radius + 1, 1],
+            x_range=[-4, 4, 1],
+            y_range=[-4, 4, 1],
             background_line_style={
                 "stroke_color": GREY,
                 "stroke_width": 1,
@@ -30,20 +30,21 @@ class VectorsInPlane(Scene):
             vector = Arrow(
                 start=center,
                 end=end_point,
+                buff=0,
                 color=BLUE,
                 stroke_width=2,  # Thin arrows
             )
             # Add labels based on conditions
             if i == 4:
-                label = MathTex(r"k").move_to(1.15 * (end_point - center) + center)
+                label = MathTex(r"k").move_to(1.15 * (end_point - center) + center).scale(0.6)
             elif i == n - 2:
-                label = MathTex(r"n-2").move_to(1.15 * (end_point - center) + center)
+                label = MathTex(r"n-2").move_to(1.15 * (end_point - center) + center).scale(0.6)
             elif i == n - 1:
-                label = MathTex(r"n-1").move_to(1.15 * (end_point - center) + center)
+                label = MathTex(r"n-1").move_to(1.15 * (end_point - center) + center).scale(0.6)
             elif 4 < i < n - 2:  # Dots for mid-section
-                label = MathTex(r"\cdots").move_to(1.15 * (end_point - center) + center)
+                label = MathTex(r"\cdots").move_to(1.15 * (end_point - center) + center).scale(0.6)
             else:
-                label = MathTex(f"{i}").move_to(1.15 * (end_point - center) + center)
+                label = MathTex(f"{i}").move_to(1.15 * (end_point - center) + center).scale(0.6)
 
             vectors.add(vector)
             vector_labels.add(label)
@@ -143,9 +144,11 @@ class VectorsInPlane(Scene):
         self.play(FadeOut(*self.mobjects))
 
                 # Add colorful explanatory text
-        explanation_text = Tex(
+        explanation_text = MarkupText(
             "To prove that the vector sum is zero, we need to show that both the sum of ",
-            "the x and y components sum to zero simultaneously."
+            "the x and y components sum to zero simultaneously.", 
+            font_size=30,
+            gradient=(BLUE_A, BLUE_E)
         )
         explanation_text.arrange(DOWN).move_to(3 * UP).scale(0.7)
 
@@ -159,4 +162,131 @@ class VectorsInPlane(Scene):
         self.play(Write(explanation_text))
         self.play(Write(equations))
         self.wait(3)
+
+from manim import *
+
+class EulerFormula(Scene):
+    def construct(self):
+        n = 9
+        radius = 2  # Radius of the circle
+        center = 3 * LEFT  # Center of the circle
+        
+        # Create axes with grids
+        axes = NumberPlane(
+            x_range=[-4, 4, 1],
+            y_range=[-4, 4, 1],
+            background_line_style={
+                "stroke_color": GREY,
+                "stroke_width": 1,
+                "stroke_opacity": 0.5
+            }
+        ).scale(0.6).shift(center)  # Shift axes to match the new center
+
+        # Add labels for the axes
+        x_label = MathTex("Re").next_to(axes.x_axis, RIGHT)
+        y_label = MathTex("Im").next_to(axes.y_axis, UP)
+
+        # Define the angle theta
+        theta = PI / 4
+
+        # Create the moving point
+        point = Dot(color=YELLOW).move_to(
+           center + radius * np.array([np.cos(theta), np.sin(theta), 0])
+        )
+
+        # Create the line from the origin to the point
+        radius_line = Line(
+            axes.c2p(0, 0),
+            center + radius * np.array([np.cos(theta), np.sin(theta), 0]),
+            color=YELLOW,
+        )
+
+        # Add the angle arc and label
+        theta_arc = Arc(
+            radius=0.4,
+            start_angle=0,
+            angle=theta,
+            arc_center=axes.c2p(0, 0),
+            color=GREEN,
+        )
+        theta_label = MathTex(r"\theta").scale(0.6).next_to(
+            theta_arc.point_from_proportion(0.5), RIGHT + UP, buff=0.1
+        )
+
+        # Add real and imaginary projections
+        real_line = DashedLine(
+           center + radius * np.array([np.cos(theta), 0, 0]),
+            center + radius * np.array([np.cos(theta), np.sin(theta), 0]),
+            color=RED,
+        )
+        imag_line = DashedLine(
+            center + radius * np.array([0, np.sin(theta), 0]),
+            center + radius * np.array([np.cos(theta), np.sin(theta), 0]),
+            color=GREEN,
+        )
+
+
+
+        # Add the text for the real and imaginary components
+        real_label = MathTex(r"\cos(\theta)").scale(0.6).next_to(
+            real_line, RIGHT
+        )
+        imag_label = MathTex(r"\sin(\theta)").scale(0.6).next_to(
+            imag_line, UP
+        )
+
+        # Euler's formula text
+        euler_title = MarkupText("Euler's Formula", font_size=30, gradient=(BLUE_A,BLUE_E)).move_to(3.5 * UP)
+        euler_formula = MathTex(
+            r"e^{i\theta} = \cos(\theta) + i\sin(\theta)"
+        ).move_to(3* RIGHT + UP)
+
+        # Add elements to the scene
+        self.play(Write(euler_title),Create(VGroup(axes,x_label,y_label)))
+        self.play(Create(radius_line), Create(point))
+        self.play(Create(theta_arc), Write(theta_label))
+        self.wait(3)
+        self.play(Create(real_line), Create(imag_line))
+        self.play(Write(real_label), Write(imag_label))
+        self.play(Write(euler_formula))
+        self.wait(2)
+        self.play(FadeOut(VGroup(point, radius_line, theta_arc, theta_label,real_label,imag_label,real_line,imag_line,euler_title)))
+        self.play(euler_formula.animate.scale(0.6).shift(2*UP + LEFT))
+        rec = SurroundingRectangle(euler_formula)
+        self.play(Create(rec))
+        self.wait()
+
+
+        # Create vectors and display them
+        vectors = VGroup()
+        vector_labels = VGroup()
+        for i in range(n):
+            angle = TAU * i / n  # Angle in radians
+            end_point = center + radius * np.array([np.cos(angle), np.sin(angle), 0])
+            vector = Arrow(
+                start=center,
+                end=end_point,
+                buff=0,
+                color=BLUE,
+                stroke_width=2,  # Thin arrows
+            )
+            # Add labels based on conditions
+            if i == 4:
+                label = MathTex(r"k").move_to(1.15 * (end_point - center) + center).scale(0.6)
+            elif i == n - 2:
+                label = MathTex(r"n-2").move_to(1.15 * (end_point - center) + center).scale(0.6)
+            elif i == n - 1:
+                label = MathTex(r"n-1").move_to(1.15 * (end_point - center) + center).scale(0.6)
+            elif 4 < i < n - 2:  # Dots for mid-section
+                label = MathTex(r"\cdots").move_to(1.15 * (end_point - center) + center).scale(0.6)
+            else:
+                label = MathTex(f"{i}").move_to(1.15 * (end_point - center) + center).scale(0.6)
+
+            vectors.add(vector)
+            vector_labels.add(label)
+
+        # Animate vectors and labels
+        self.play(Create(vectors))
+        self.play(Create(vector_labels))
+        self.wait(2)
 
