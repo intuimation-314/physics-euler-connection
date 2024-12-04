@@ -1,6 +1,5 @@
 from manim import *
 
-from manim import *
 
 class VectorsInPlane(Scene):
     def construct(self):
@@ -89,18 +88,17 @@ class VectorsInPlane(Scene):
 
         # Display equations for x_k, y_k, and v_k
         equations = VGroup(
-            MathTex(r"x_k = \cos(\theta_k) \hat{i}").scale(0.7),
-            MathTex(r"y_k = \sin(\theta_k) \hat{j}").scale(0.7),
-            MathTex(r"\vec{\mathbf{v}}_k = \cos(\theta_k) \hat{i} + \sin(\theta_k) \hat{j}").scale(0.7),
-            MathTex(r"\vec{\mathbf{v}}_k = \cos\left(\frac{2k\pi}{n}\right) \hat{i} + \sin\left(\frac{2k\pi}{n}\right) \hat{j}").scale(0.7),
-            MathTex(r"\sum_{k=0}^{n-1}\vec{\mathbf{v}}_k = \sum_{k=0}^{n-1} \left(\cos\left(\frac{2k\pi}{n}\right) \hat{i} + \sin\left(\frac{2k\pi}{n}\right) \hat{j}\right)").scale(0.65),
-            MathTex(" = ", r"\sum_{k=0}^{n-1} \cos\left(\frac{2k\pi}{n}\right) \hat{i} + \sum_{k=0}^{n-1} \sin\left(\frac{2k\pi}{n}\right) \hat{j}").scale(0.7)
-        ).arrange(DOWN, aligned_edge=LEFT).move_to(RIGHT * 4 + UP * 2.5)
-        tex = MathTex("= ", r"\frac{2k\pi}{n}").next_to(theta_label, RIGHT).scale(0.7)
+            MathTex(r"x_k = \cos(\theta_k) \hat{i}\quad\text{and}\quad y_k = \sin(\theta_k) \hat{j}").scale(0.6),
+            MathTex(r"\vec{\mathbf{v}}_k = \cos(\theta_k) \hat{i} + \sin(\theta_k) \hat{j}").scale(0.6),
+            MathTex(r"\vec{\mathbf{v}}_k = \cos\left(\frac{2k\pi}{n}\right) \hat{i} + \sin\left(\frac{2k\pi}{n}\right) \hat{j}").scale(0.6),
+            MathTex(r"\sum_{k=0}^{n-1}\vec{\mathbf{v}}_k = \sum_{k=0}^{n-1} \left[\cos\left(\frac{2k\pi}{n}\right) \hat{i} + \sin\left(\frac{2k\pi}{n}\right) \hat{j}\right]").scale(0.55),
+            MathTex(r"\sum_{k=0}^{n-1}\vec{\mathbf{v}}_k = \sum_{k=0}^{n-1} \cos\left(\frac{2k\pi}{n}\right) \hat{i} + \sum_{k=0}^{n-1} \sin\left(\frac{2k\pi}{n}\right) \hat{j}").scale(0.6)
+        ).arrange(DOWN, aligned_edge=LEFT).move_to(RIGHT * 3)
+        tex = MathTex(r"=\frac{2k\pi}{n}").next_to(theta_label, RIGHT, buff=0.01).scale(0.6)
         # Animate equations appearing on the right
-        self.play(Write(equations[:2]))
+        self.play(Write(equations[0]))
         self.wait(2)
-        self.play(Write(equations[2]))
+        self.play(Write(equations[1]))
         self.wait(2)
         self.play(FadeOut(VGroup(x_label, y_label, x_projection, y_projection)))
         self.wait()
@@ -110,15 +108,16 @@ class VectorsInPlane(Scene):
         for i in range(4):
             angle = TAU * (i + 1) / n
             arc = Arc(
-                radius=1,
+                radius=0.5,
                 start_angle=0,
                 angle=angle,
                 color=YELLOW,
                 stroke_width=2,
             ).move_arc_center_to(center)
             angle_label = MathTex(
-                fr"\frac{{2 \cdot {i+1} \cdot \pi}}{{{n}}} \text{{ rad}}"
-            ).scale(0.6).move_to(center + UP * 2)
+                fr"\theta_{i+1} = \frac{{2 \cdot {i+1} \cdot \pi}}{{{n}}} \text{{ rad}}",
+                color = YELLOW
+            ).scale(0.6).move_to( 2 * RIGHT)
             arc_angle_group.add(VGroup(arc, angle_label))
 
         self.play(Create(arc_angle_group[0]))
@@ -133,22 +132,22 @@ class VectorsInPlane(Scene):
                 self.wait()
         self.play(Write(tex))
         self.wait(3)
-        self.play(FadeOut(VGroup(equations[:3])),Write(equations[3]))
+        self.play(FadeOut(VGroup(equations[:2])),Write(equations[2]))
+        self.wait()
+        self.play(Write(equations[3]))
         self.wait()
         self.play(Write(equations[4]))
         self.wait()
-        self.play(Write(equations[5]))
-        self.wait()
-        self.play(FadeOut(VGroup(equations[3],equations[4])))
+        self.play(FadeOut(VGroup(equations[2],equations[3])))
+        self.play(equations[4].animate.shift(2*UP))
         self.wait(2)
         self.play(FadeOut(*self.mobjects))
 
                 # Add colorful explanatory text
-        explanation_text = MarkupText(
+        explanation_text = Tex(
             "To prove that the vector sum is zero, we need to show that both the sum of ",
             "the x and y components sum to zero simultaneously.", 
-            font_size=30,
-            gradient=(BLUE_A, BLUE_E)
+            color=BLUE
         )
         explanation_text.arrange(DOWN).move_to(3 * UP).scale(0.7)
 
@@ -162,8 +161,6 @@ class VectorsInPlane(Scene):
         self.play(Write(explanation_text))
         self.play(Write(equations))
         self.wait(3)
-
-from manim import *
 
 class EulerFormula(Scene):
     def construct(self):
