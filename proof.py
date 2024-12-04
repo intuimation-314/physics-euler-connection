@@ -232,7 +232,7 @@ class EulerFormula(Scene):
         )
 
         # Euler's formula text
-        euler_title = MarkupText("Euler's Formula", font_size=30, gradient=(BLUE_A,BLUE_E)).move_to(3.5 * UP)
+        euler_title = MarkupText("Euler's Formula", color = BLUE).move_to(3.5 * UP)
         euler_formula = MathTex(
             r"e^{i\theta} = \cos(\theta) + i\sin(\theta)"
         ).move_to(3* RIGHT + UP)
@@ -338,5 +338,75 @@ class EulerFormula(Scene):
         self.play(Write(equations[2]))
         self.wait(2)
         self.play(FadeOut(*self.mobjects))
+
+                        # Add colorful explanatory text
+        explanation_text = MathTex(
+            r"\text{If we could somehow prove that the sum of these exponents is 0, i.e,}",
+           r"\sum_{k=0}^{n-1}e^{i\frac{2k\pi}{n}} = 0",
+           r"\text{This would imply: }",
+           r"\sum_{k=0}^{n-1} \cos\left(\frac{2k\pi}{n}\right) = 0 \quad \text{and} \quad \sum_{k=0}^{n-1} \sin\left(\frac{2k\pi}{n}\right) = 0"
+        ).move_to(UP)
+        VGroup(explanation_text[0],explanation_text[2]).set_color(BLUE)
+        explanation_text.arrange(DOWN).scale(0.7)
+        self.play(Write(explanation_text[:2]))
+        self.wait()
+        self.play(Write(explanation_text[2:]))
+        self.wait(2)
+        self.play(FadeOut(*self.mobjects))
+
+        explanation_text1 = MathTex(r"\text{Let's jump right into our final proof.}",
+                                    r"\sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}}",
+                                    r"\text{When we expand this summation, it looks like this:}",
+                                    r"\sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}} = 1 + e^{i \frac{2\pi}{n}} + e^{i \frac{4\pi}{n}} + \ldots + e^{i \frac{2(n-1)\pi}{n}}").move_to(UP)
+        VGroup(explanation_text1[0],explanation_text1[2]).set_color(BLUE)
+        explanation_text1.arrange(DOWN,buff=0.5).scale(0.7)
+        self.play(Write(explanation_text1[0]))
+        self.wait()
+        self.play(Write(explanation_text1[1]))
+        self.wait(2)
+        self.play(Write(explanation_text1[2:]))
+        self.wait(2)
+        self.play(FadeOut(explanation_text1[:3]))
+        self.wait()
+        self.play(explanation_text1[3].animate.move_to(3*UP).scale(1))
+        self.wait(2)
+
+        explanation_text2 = MathTex(
+            r"\text{Notice } e^{i\frac{2\pi}{n}} \text{ is common in all terms, so let } e^{i\frac{2\pi}{n}} = x",
+            r"1 + x + x^2 + x^3 + \ldots + x^{n-1}",
+            r"\text{This should look familiar---it's a geometric series!}",
+            r"\frac{1-x^n}{1-x}", 
+            r"= \frac{1 - e^{i\frac{2\pi}{n} \cdot n}}{1 - e^{i\frac{2\pi}{n}}}",
+            r"= \frac{1 - e^{i2\pi}}{1 - e^{i\frac{2\pi}{n}}}",
+            r"= \frac{1 - 1}{1 - e^{i\frac{2\pi}{n}}} = 0",
+            )
+        explanation_text3 = MathTex(r"e^{i2\pi} = \cos(2\pi) + i\sin(2\pi)",
+                                    color = YELLOW
+                                    ).scale(0.8).move_to(2 * DOWN)
+
+        VGroup(explanation_text2[0],explanation_text2[2]).set_color(BLUE)
+        explanation_text2[0:4].arrange(DOWN,buff=0.5).scale(0.7).next_to(explanation_text1[3], DOWN, buff=0.5)
+        explanation_text2[4].next_to(explanation_text2[3], RIGHT, buff=0.1).scale(0.7)
+        explanation_text2[5].next_to(explanation_text2[3], RIGHT, buff=0.1).scale(0.7)
+        explanation_text2[6].next_to(explanation_text2[3], DOWN, buff=0.5).scale(0.7)
+        self.play(Write(explanation_text2[0]))
+        self.wait()
+        self.play(Write(explanation_text2[1]))
+        self.wait(2)
+        self.play(Write(explanation_text2[2:4]))
+        self.wait(2)
+        self.play(Write(explanation_text2[4]))
+        self.wait()
+        self.play(ReplacementTransform(explanation_text2[4],explanation_text2[5]))
+        self.wait()
+        self.play(Write(explanation_text3))
+        self.wait()
+        self.play(FadeOut(explanation_text3))
+        self.wait()
+        self.play(Write(explanation_text2[6]))
+        self.wait()
+
+
+
 
 
