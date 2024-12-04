@@ -180,8 +180,8 @@ class EulerFormula(Scene):
         ).scale(0.6).shift(center)  # Shift axes to match the new center
 
         # Add labels for the axes
-        x_label = MathTex("Re").next_to(axes.x_axis, RIGHT)
-        y_label = MathTex("Im").next_to(axes.y_axis, UP)
+        x_label0 = MathTex("Re").next_to(axes.x_axis, RIGHT)
+        y_label0 = MathTex("Im").next_to(axes.y_axis, UP)
 
         # Define the angle theta
         theta = PI / 4
@@ -238,7 +238,7 @@ class EulerFormula(Scene):
         ).move_to(3* RIGHT + UP)
 
         # Add elements to the scene
-        self.play(Write(euler_title),Create(VGroup(axes,x_label,y_label)))
+        self.play(Write(euler_title),Create(VGroup(axes,x_label0,y_label0)))
         self.play(Create(radius_line), Create(point))
         self.play(Create(theta_arc), Write(theta_label))
         self.wait(3)
@@ -405,6 +405,37 @@ class EulerFormula(Scene):
         self.wait()
         self.play(Write(explanation_text2[6]))
         self.wait()
+        self.play(FadeOut(*self.mobjects))
+        self.wait()
+        
+        # Create a brace with label "r"
+        brace = Brace(vectors[0], UP)
+        brace_label = MathTex(r"r").next_to(brace, DOWN)
+
+        # Animate vectors, brace, and label
+        self.play(Create(vectors), Create(VGroup(axes, x_label0, y_label0)))
+        self.wait(2)
+        self.play(vectors.animate.scale(1.2))
+        self.play(Create(brace),Create(brace_label))
+        self.wait()
+        explanation_text4 = MathTex(r"\text{Euler representation for vectors looks like:}",
+                                    r"\sum_{k=0}^{n-1} r \cdot e^{i\frac{2k\pi}{n}}",
+                                    r"\text{r is constant, pull out of the summation:}",
+                                    r"r \cdot \sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}}",
+                                    r"r \cdot 0 = 0")
+        VGroup(explanation_text4[0],explanation_text4[2]).set_color(BLUE)
+        explanation_text4.arrange(DOWN,buff=0.5).scale(0.7).move_to(3.5 * RIGHT + UP)
+        
+        self.play(Write(explanation_text4[0]))
+        self.wait()
+        self.play(Write(explanation_text4[1]))
+        self.wait(2)
+        self.play(Write(explanation_text4[2]))
+        self.wait(2)
+        self.play(Write(explanation_text4[3]))
+        self.wait()
+        self.play(Write(explanation_text4[4]))
+        self.wait(2)
 
 
 
