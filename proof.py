@@ -506,6 +506,7 @@ class ContinuousProof(Scene):
         self.wait(1)
         
         self.play(ReplacementTransform(cloud_text,cloud_text1))
+        self.play(Transform(mu_bot_thinking, mu_bot_happy), run_time=1)
         # Blinking Animation
         self.play(blink(), run_time=0.5)
         self.wait(0.5)
@@ -513,7 +514,6 @@ class ContinuousProof(Scene):
         self.wait(1)
         
         self.play(ReplacementTransform(cloud_text1,cloud_text2))
-        self.play(Transform(mu_bot_thinking, mu_bot_happy), run_time=1)
         # Blinking Animation
         self.play(blink(), run_time=0.5)
         self.wait(0.5)
