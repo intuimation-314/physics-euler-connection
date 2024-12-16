@@ -437,7 +437,173 @@ class EulerFormula(Scene):
         self.play(Write(explanation_text4[4]))
         self.wait(2)
 
+class ContinuousProof(Scene):
+    def construct(self):
+        mu = MathTex(r"\mu").scale(5).set_color(BLUE).shift(LEFT + DOWN)
+        
+        # Eyes: Create two small white circles with black pupils
+                # Eyes: Create two white ovals for the eyes
+        left_eye_white = Ellipse(width=0.3, height=0.4, color=WHITE, fill_opacity=1).shift(UP * 0.6 + LEFT * 1.25 + DOWN)
+        right_eye_white = Ellipse(width=0.3, height=0.4, color=WHITE, fill_opacity=1).shift(UP * 0.6 + LEFT * 0.65 + DOWN)
+        left_eye_pupil = Dot(point=UP * 0.6 + LEFT * 1.25 + DOWN, radius=0.1, color=BLACK)
+        right_eye_pupil = Dot(point=UP * 0.6 + LEFT * 0.65 + DOWN, radius=0.1, color=BLACK)
+        
+        # Add small circle in the middle of each pupil
+        left_eye_glint = Dot(point=UP * 0.6 + LEFT * 1.25 + DOWN, radius=0.03, color=WHITE, fill_opacity=0.8)
+        right_eye_glint = Dot(point=UP * 0.6 + LEFT * 0.65 + DOWN, radius=0.03, color=WHITE,fill_opacity=0.8)
+        
+        # Group the eyes for easy animation
+        eyes = VGroup(left_eye_white, right_eye_white, 
+                      left_eye_pupil, right_eye_pupil,
+                      left_eye_glint,right_eye_glint)
+
+        # Assemble the bot
+        mu_bot = VGroup(mu, eyes)
 
 
+        # Mouth (arc for different moods)
+        happy_mouth = Arc(radius=0.2, 
+                          start_angle= - 3* PI/4,
+                          angle= 2 * PI/4).set_color(WHITE).move_to(DOWN * 0.9 + LEFT)
+        sad_mouth = Arc(radius=0.2, start_angle= PI/4,
+                        angle= 2 *PI/4).set_color(WHITE).move_to(DOWN * 0.9 + LEFT)
+        thinking_mouth = Line(start=LEFT * 0.15 + DOWN * 0.9 + LEFT, 
+                              end=RIGHT * 0.15 + DOWN * 0.9 + LEFT).set_color(WHITE)
+        mu_bot_happy = VGroup(mu_bot,happy_mouth)
+        mu_bot_sad = VGroup(mu_bot,sad_mouth)
+        mu_bot_thinking = VGroup(mu_bot,thinking_mouth)
+        # Thinking cloud
+        cloud = SVGMobject(r"C:/Users/Sumit Sah/Downloads/thinking_cloud.svg").scale(2).set_color(WHITE).next_to(mu, UP + RIGHT)
+        cloud_text = Tex("Isn't limited to finite", 
+                         "number of vectors!")
+        cloud_text.arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR )
+        cloud_text1 = Tex("Holds for continuous", 
+                          "distribution as well!")
+        cloud_text1.arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR)
+        cloud_text2 = Tex("Remember the charged", 
+                          "ring example?")
+        cloud_text2.arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR )
+
+        # Blinking effect using fade-in and fade-out
+        def blink():
+            return AnimationGroup(
+                FadeOut(left_eye_pupil,right_eye_pupil,
+                        left_eye_glint,right_eye_glint),
+                FadeIn(left_eye_pupil,right_eye_pupil,
+                       left_eye_glint,right_eye_glint),
+                lag_ratio=0.2,
+            )
+
+        
+        # Intro Animation
+        self.play(FadeIn(mu_bot_thinking), run_time=1.5)
+        # Thinking cloud appears
+        self.play(FadeIn(cloud), Write(cloud_text), run_time=2)
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(1)
+        
+        self.play(ReplacementTransform(cloud_text,cloud_text1))
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(1)
+        
+        self.play(ReplacementTransform(cloud_text1,cloud_text2))
+        self.play(Transform(mu_bot_thinking, mu_bot_happy), run_time=1)
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(2)
 
 
+class ContinuousVectors(Scene):
+    def construct(self):
+        # Initial setup for the scene
+        radius = 2  # Radius of the circle
+        center = ORIGIN # Center of the circle
+
+        # Create axes with grids
+        axes = NumberPlane(
+            x_range=[-4, 4, 1],
+            y_range=[-4, 4, 1],
+            background_line_style={
+                "stroke_color": GREY,
+                "stroke_width": 1,
+                "stroke_opacity": 0.5
+            }
+        ).scale(0.6)  # Scale the axes
+        self.play(Create(axes))
+
+        # Function to create vectors dynamically based on n
+        def create_vectors(n):
+            vectors = VGroup()
+            for i in range(n):
+                angle = TAU * i / n  # Angle in radians
+                end_point = center + radius * np.array([np.cos(angle), np.sin(angle), 0])
+                vector = Arrow(
+                    start=center,
+                    end=end_point,
+                    buff=0,
+                    color=BLUE,
+                    stroke_width=2,
+                )
+                vectors.add(vector)
+            return vectors
+
+        # Create a ValueTracker to control the number of vectors
+        n_tracker = ValueTracker(10)  # Initial number of vectors
+
+        # Create an initial group of vectors
+        vectors = create_vectors(10)
+
+        # Display the number of vectors (n) on the screen
+        n_text = MathTex(f"n = {n_tracker.get_value()}").scale(0.7).to_edge(UP)
+        self.play(Write(n_text))
+
+        # Add vectors to the scene
+        self.add(vectors)
+
+        # Function to update the vectors and text based on n
+        def update_scene(n):
+            # Update the text
+            n_text.become(MathTex(f"n = {n}").scale(0.7).to_edge(UP))
+            # Create the new vectors
+            new_vectors = create_vectors(n)
+            # Transform the current vectors to the new set
+            self.play(Transform(vectors, new_vectors), run_time=0.5)
+
+        # Animate transformation from 10 vectors to 1000 vectors
+        for n in [20, 40, 60, 80, 100, 200, 500, 1000]:
+            self.play(n_tracker.animate.set_value(n), run_time=1)  # Animate the ValueTracker
+            update_scene(n)
+
+        # Wait before finishing the scene
+        self.wait(2)
+
+class SumToIntegral(Scene):
+    def construct(self):
+        # Create the introductory text for summation
+        intro_text = Tex(r"As $n \to \infty $, the summation", 
+                         r"can be transformed into an intgral",
+                         color=BLUE).scale(1.5)
+        intro_text.arrange(DOWN).to_edge(UP)
+
+        # Create the integral formula
+        integral = MathTex(
+            r"\lim_{n \to \infty} \sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}}",
+            r" = \frac{n}{2\pi} \int_0^{2\pi} e^{i\theta} \, d\theta",
+        ).scale(1.5)
+        integral.next_to(intro_text, DOWN, buff=1)
+
+        # Display "The summation" and formula
+        self.play(Write(intro_text))
+        self.wait(1)
+
+        # Display "transformed into the integral:" and formula
+        self.play(Write(integral))
+        self.wait(2)

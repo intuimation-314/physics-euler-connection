@@ -11,7 +11,7 @@
 
 \section*{Introduction to the Problem}
 
-Imagine a block on a frictionless surface being pulled in one direction. According to Newton's laws, the block accelerates in that direction. But if you apply an equal force in the opposite direction, the forces cancel out and the block stays still. Notice how our formula holds true—two forces making an angle of \( \frac{2\pi}{2} \), which is \( \pi \) radians.
+Imagine a block on a frictionless surface being pulled in one direction. According to Newton's laws, the block accelerates in that direction. But if you apply an equal force in the opposite direction, the forces cancel out and the block stays still. Notice the two forces making an angle of \( \frac{2\pi}{2} \), which is \( \pi \) radians.
 
 Now, let’s take it a step further. What if we have three forces, each separated by \( \frac{2\pi}{3} \) radians? Adding these vectors can be a bit tricky, but we can use the parallelogram law of vector addition: if you think of two vectors at a point as adjacent sides of a parallelogram, the resultant is given by the diagonal. In this case, you’ll see that the resultant is equal and opposite to the third force.
 
@@ -28,6 +28,8 @@ One way to get a better grasp of this is by picturing the vectors being shifted,
 It might seem surprising that such an abstract concept like Euler’s Formula can prove something so practical in physics, but trust me, this video is going to be exciting. We’re about to explore one of the most beautiful connections between math and physics.
 
 To make this concept more concrete, let's look at another specific example. I'll start with how I first encountered this problem in my physics class.
+
+\section*{Example encountered in Physics}
 
 Picture a ring with a uniform positive charge. What’s the electric field intensity at its center?
 
@@ -47,7 +49,7 @@ When I asked my teacher why this happens, he simply said, "It's symmetry." Each 
 
 With an even number of charges, it’s easy to see that each electric field has an exact opposite to cancel it out. But what if there’s an odd number of charges? There’s no exact opposite field to cancel out each one. So, does this balancing act still hold for any number of vectors?
 
-\section*{Starting the Proof}
+\section*{Proof: Discrete Case}
 
 Let’s start by considering these vectors at the origin of an \( x \)-\( y \) plane. To keep things simple, we'll assume that each vector has a magnitude of 1.
 
@@ -214,6 +216,9 @@ Hence, \( r \cdot 0 = 0 \).
 
 And that wraps up our proof that the sum of the vectors is zero, using Euler's formula and the properties of geometric series.
 
+\section*{Continuous Case}
+
+
 The beauty of this problem is that it isn't limited to just a finite number of vectors. We can use the same principle to prove that the sum is zero even for continuous charge distributions or any continuous distribution of forces—just like the charged ring example we saw earlier.
 
 When we move from a discrete set of vectors to a continuous distribution, the summation transits into an integral. 
@@ -224,57 +229,65 @@ The summation:
 \sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}}
 \]
 
-can be transformed into an integral as \( n \) approaches infinity:
+can be transformed into an integral as \( n \to \infty \):
 
 \[
-\int_0^{n-1} e^{i\frac{2k\pi}{n}} \, d\theta
+\int_0^{n-1} e^{i\frac{2k\pi}{n}} \, dk.
 \]
 
-Since \( n \) is nearly equal to \( n-1 \) as \( n \) approaches infinity, we can extend the limits of integration from 0 to \( n \):
+Since \( n-1 \approx n \) for large \( n \), we can extend the limits of integration to:
 
 \[
-\int_0^{n} e^{i\frac{2k\pi}{n}} \, d\theta
+\int_0^{n} e^{i\frac{2k\pi}{n}} \, dk.
 \]
 
-As \( n \) approaches infinity, the discrete angles \( \frac{2k\pi}{n} \) become a continuous variable \( \theta \) that ranges from 0 to \( 2\pi \):
+As \( n \to \infty \), the discrete angles \( \frac{2k\pi}{n} \) become a continuous variable \( \theta \), ranging from \( 0 \) to \( 2\pi \). Substituting this transformation:
 
 \[
-\int_0^{2\pi} e^{i\theta} \, d\theta
+\theta = \frac{2\pi}{n}k, \quad d\theta = \frac{2\pi}{n} \, dk, \quad dk = \frac{n}{2\pi} \, d\theta.
 \]
 
-To evaluate the integral, we use the antiderivative of \( e^{i\theta} \), which is:
+The integral becomes:
 
 \[
-\int e^{i\theta} \, d\theta = \frac{e^{i\theta}}{i}
+\int_0^n e^{i\frac{2k\pi}{n}} \, dk = \frac{n}{2\pi} \int_0^{2\pi} e^{i\theta} \, d\theta.
 \]
 
-Now, applying the limits of integration from 0 to \( 2\pi \):
+To evaluate the integral, use the antiderivative of \( e^{i\theta} \):
 
 \[
-\left. \frac{e^{i\theta}}{i} \right|_0^{2\pi} = \frac{e^{i2\pi}}{i} - \frac{e^{i\cdot0}}{i}
+\int e^{i\theta} \, d\theta = \frac{e^{i\theta}}{i}.
 \]
 
-We know from Euler's formula that:
+Substituting the limits:
 
 \[
-e^{i2\pi} = \cos(2\pi) + i\sin(2\pi) = 1
+\int_0^{2\pi} e^{i\theta} \, d\theta = \left[\frac{e^{i\theta}}{i}\right]_0^{2\pi}.
 \]
 
-and
+At \( \theta = 2\pi \):
 
 \[
-e^{i\cdot0} = \cos(0) + i\sin(0) = 1
+e^{i\theta} = e^{i2\pi} = 1.
 \]
 
-Substituting these into the integral:
+At \( \theta = 0 \):
 
 \[
-\frac{1}{i} - \frac{1}{i} = 0
+e^{i\theta} = 1.
+\]
+
+Thus:
+
+\[
+\int_0^{2\pi} e^{i\theta} \, d\theta = \frac{1 - 1}{i} = 0.
 \]
 
 Hence, the integral of \( e^{i\theta} \) from 0 to \( 2\pi \) is zero.
 
 This proves that the sum of vectors is zero even in a continuous distribution, just like in the discrete case.
+
+\section*{Verifying Result Computationally}
 
 For my programming friends who might not prefer this detailed proof, or for anyone looking to verify the result computationally, here’s a Python code snippet you can use to confirm the outcome.
 
@@ -305,6 +318,8 @@ The code calculates the sum of \( n \) unit vectors evenly spaced around a circl
 
 The cool thing about this problem is how simple it seems at first, yet the solution has so much depth. What starts off as a basic vector addition puzzle turns into an exciting dive into complex numbers and geometric series.
 
+\section*{Applications}
+
 This really shows how abstract math concepts can give us such clear and elegant solutions to real-world problems.
 
 But the examples we explored earlier are just a glimpse into the many applications of this concept.
@@ -317,7 +332,7 @@ But the examples we explored earlier are just a glimpse into the many applicatio
     \item And lastly, let’s not forget rotational systems like fans and turbines. The forces exerted by the blades of a fan are designed to cancel out, allowing for smooth, balanced rotation without any wobbling or unnecessary wear and tear.
 \end{itemize}
 
-Whether you’re here out of curiosity or to dig deeper, I hope you enjoyed this journey as much as I did. If you liked this video, make sure to hit that thumbs up and subscribe to Math Simplified for more awesome math adventures.
+Whether you’re here out of curiosity or to dig deeper, I hope you enjoyed this journey as much as I did. If you liked this video, make sure to hit that thumbs up and subscribe to Intuimation for more awesome math adventures.
 
 
 Thanks for watching, and until next time, keep exploring the amazing world of math!
