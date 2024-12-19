@@ -607,3 +607,101 @@ class SumToIntegral(Scene):
         # Display "transformed into the integral:" and formula
         self.play(Write(integral))
         self.wait(2)
+
+class SumToIntegralEvaluation(Scene):
+    def construct(self):
+        integral = MathTex(
+            r"\lim_{n \to \infty} \sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}} = \frac{n}{2\pi} \int_0^{2\pi} e^{i\theta} \, d\theta",
+            r" = 0"
+        ).to_edge(UP).scale(0.8)
+        self.play(Write(integral[0]))
+        self.wait(2)
+
+        # Display the integral's antiderivative formula
+        antiderivative = MathTex(r"\int e^{i\theta} \, d\theta = \frac{e^{i\theta}}{i}").scale(0.8)
+        antiderivative.next_to(integral, DOWN).shift(LEFT)
+
+        self.play(Write(antiderivative))
+        self.wait(2)
+
+        euler_formula = MathTex(r"e^{i\theta} = cos(\theta) + isin(\theta)",
+                                color = BLUE).scale(0.6).move_to(RIGHT * 5 + UP)
+
+        # Display the substitution into the integral with limits
+        substitution = MathTex(
+            r"\int_0^{2\pi} e^{i\theta} \, d\theta = \left[\frac{e^{i\theta}}{i}\right]_0^{2\pi} = \frac{e^{i2\pi} - e^{i\cdot0}}{i}"
+        ).next_to(antiderivative, DOWN).scale(0.8)
+        self.play(Write(substitution))
+        self.wait(2)
+        self.play(Write(euler_formula))
+        self.wait(2)
+
+        # Evaluate at the upper limit (theta = 2π)
+        evaluation_2pi = MathTex(r"\text{At $\theta = 2\pi$}: e^{i\cdot2\pi} = 1").next_to(euler_formula, DOWN).scale(0.6)
+        self.play(Write(evaluation_2pi))
+        self.wait(2)
+
+        # Evaluate at the lower limit (theta = 0)
+        evaluation_0 = MathTex(r"\text{At $\theta = 0$}: e^{i\cdot0} = 1").next_to(evaluation_2pi, DOWN).scale(0.6)
+        self.play(Write(evaluation_0))
+        self.wait(2)
+        rec = SurroundingRectangle(VGroup(euler_formula, evaluation_2pi, evaluation_0))
+        self.play(Create(rec))
+        self.wait()
+        # Final result of the integral
+
+        final_result = MathTex(r"\int_0^{2\pi} e^{i\theta} \, d\theta = \frac{1 - 1}{i} = 0").scale(0.8)
+        final_result.next_to(substitution, DOWN)
+        self.play(Write(final_result))
+        self.wait(2)
+
+        # Fade out all objects
+        self.play( FadeOut(antiderivative), FadeOut(substitution), FadeOut(evaluation_2pi), 
+                  FadeOut(evaluation_0), FadeOut(final_result), FadeOut(VGroup(euler_formula,rec)),
+                  integral.animate.move_to(ORIGIN))
+        self.wait(2)
+
+class VectorSumScene(Scene):
+    def construct(self):
+        # Title Text
+        title = Text("Computational Verification of Vector Sum", gradient=[BLUE, PURPLE]).move_to(2.6 * UP).scale(0.8)
+        self.add(title)
+
+        # Code snippet to be displayed
+        code_snippet = """
+import numpy as np
+
+def vector_sum(n):
+    # Define each angle in radians, evenly spaced around the circle
+    angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
+    # Calculate x and y components of each vector
+    x_components = np.cos(angles)
+    y_components = np.sin(angles)
+    # Sum up the x and y components
+    total_x = np.sum(x_components)
+    total_y = np.sum(y_components)
+    # Resultant vector sum
+    return total_x, total_y
+
+# Example with 12 vectors (you can change n to test different values)
+n = 12
+result = vector_sum(n)
+print(f"Resultant vector sum: ({result[0]:.2e}, {result[1]:.2e})")
+
+# Expected output should be close to (0, 0) for any n > 1
+"""
+        # Display code snippet at the bottom
+        code_display = Code(
+            code=code_snippet,
+            font_size=24,
+            language="python",
+            style="monokai",  # Using the style directly
+            tab_width=4,
+            insert_line_no=False,
+            line_spacing=0.6
+        ).scale(0.6).next_to(title, DOWN, buff=0.5)
+
+        self.play(Write(title))
+        self.wait(1)
+        self.play(Create(code_display))
+        self.wait(2)
