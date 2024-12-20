@@ -661,10 +661,10 @@ class SumToIntegralEvaluation(Scene):
                   integral.animate.move_to(ORIGIN))
         self.wait(2)
 
-class VectorSumScene(Scene):
+class VectorSumCode(Scene):
     def construct(self):
         # Title Text
-        title = Text("Computational Verification of Vector Sum", gradient=[BLUE, PURPLE]).move_to(2.6 * UP).scale(0.8)
+        title = Text("Computational Verification of Vector Sum", gradient=[BLUE, GREEN]).move_to(2.6 * UP).scale(0.7)
         self.add(title)
 
         # Code snippet to be displayed

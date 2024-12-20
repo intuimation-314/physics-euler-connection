@@ -1,0 +1,5 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/proof/1080p60/partial_movie_files/VectorSumCode/3529212410_2028329206_182201821.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/proof/1080p60/partial_movie_files/VectorSumCode/3040924799_3890345977_3362983800.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/proof/1080p60/partial_movie_files/VectorSumCode/3040924799_2309161367_3682975655.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/proof/1080p60/partial_movie_files/VectorSumCode/3040924799_1141282389_432121736.mp4'
