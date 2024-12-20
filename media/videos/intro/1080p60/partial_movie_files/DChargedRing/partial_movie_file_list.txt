@@ -1,0 +1,9 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3529212410_533799246_223132457.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_1864234631_3994485389.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_993477316_2418109910.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_3890345977_1358195415.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_2712831598_1144378272.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_3890345977_2896177996.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_1408606706_3680745181.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/DChargedRing/3040924799_3890345977_711739807.mp4'

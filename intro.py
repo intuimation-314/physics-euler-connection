@@ -57,7 +57,7 @@ class BlockOnSurface(Scene):
             arrow = Arrow(start=start_point, end=end_point, color=RED, stroke_width=2)
             first_arrows.add(arrow)
         
-        # Angle Label Setup
+            # Angle Label Setup
             angle_arc = Arc(
                 radius=radius / 3,  # Arc radius
                 start_angle=0, 
@@ -101,6 +101,26 @@ class BlockOnSurface(Scene):
             self.play(ReplacementTransform(previous_arrows, current_arrows), Create(angle_arc), Write(angle_label))
             self.wait(2)
             self.play(FadeOut(angle_arc), FadeOut(angle_label))  # Fade out the arc and label
+
+            # For j = 3, illustrate the parallelogram law
+            if j == 3:
+                # The first two arrows (current_arrows[0] and current_arrows[1]) will be added using the parallelogram law
+                vec_1 = current_arrows[0]
+                vec_2 = current_arrows[1]
+
+                # The resultant vector formed by adding vec_1 and vec_2
+                res_angle = PI/3
+                resultant_vec = Arrow(start=center, end=center + np.array([radius * np.cos(res_angle), radius * np.sin(res_angle), 0]), color=PURPLE, stroke_width=3)
+        
+                # Create dashed lines showing the parallelogram sides
+                dashed1 = DashedLine(vec_1.get_end(), resultant_vec.get_end())
+                dashed2 = DashedLine(vec_2.get_end(), resultant_vec.get_end())
+
+                # Animate the parallelogram visualization
+                self.play(Create(dashed1), Create(dashed2), Create(resultant_vec))
+                self.wait(2)
+                self.play(FadeOut(dashed1), FadeOut(dashed2), FadeOut(resultant_vec))
+
             previous_arrows = current_arrows
 
         # Fade out the last group of arrows
@@ -111,6 +131,7 @@ class BlockOnSurface(Scene):
         self.play(FadeIn(single_force_arrow))
         self.wait(2)
         self.play(FadeOut(*self.mobjects))
+
 
 class NEqualVectors(Scene):
     def construct(self):
@@ -257,6 +278,10 @@ class MuBot(Scene):
                           "all these vectors ?")
         cloud_text1.arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR)
         cloud_text2 = Tex("Symmetrical Arrangement !").scale(0.6).move_to(cloud.get_center() + 0.5*UR)
+        cloud_text3 = Tex("Euler's Formula").scale(0.6).move_to(cloud.get_center() + 0.5*UR)
+        cloud_text4 = Tex("Connection between",
+                          "maths and physics").arrange(DOWN).scale(0.6).move_to(cloud.get_center() + 0.5*UR)
+
 
         # Blinking effect using fade-in and fade-out
         def blink():
@@ -294,10 +319,27 @@ class MuBot(Scene):
         self.play(blink(), run_time=0.5)
         self.wait(2)
 
+        self.play(ReplacementTransform(cloud_text2,cloud_text3))
+        self.play(Transform(mu_bot_thinking, mu_bot_happy), run_time=1)
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(2)
+
+        self.play(ReplacementTransform(cloud_text3,cloud_text4))
+        self.play(Transform(mu_bot_thinking, mu_bot_happy), run_time=1)
+        # Blinking Animation
+        self.play(blink(), run_time=0.5)
+        self.wait(0.5)
+        self.play(blink(), run_time=0.5)
+        self.wait(2)
+
        
 
 class ChargedRing(Scene):
     def construct(self):
+        title = Text("What's the electric field at the center ?", gradient=[BLUE,GREEN]).scale(0.7).to_edge(UP)
         # Create a ring
         ring_radius = 2
         ring_center = LEFT * 3
@@ -308,7 +350,8 @@ class ChargedRing(Scene):
         charges = VGroup()
         for i in range(num_charges):
             angle = i * 2 * PI / num_charges
-            charge = MathTex(r"\boldsymbol{+}", color=RED).scale(0.6)
+            charge = MathTex(r"\boldsymbol{+}", color=RED,
+                             stroke_width = 3).scale(0.6)
             charge.move_to(ring_center + np.array([np.cos(angle), np.sin(angle), 0]) * ring_radius)
             charges.add(charge)
 
@@ -377,15 +420,13 @@ class ChargedRing(Scene):
         self.play(Create(ring))
         self.play(FadeIn(charges))
         self.wait(1)
-        
+        self.play(Write(title),Create(center_dot))
+        self.wait(2)
         # Show all segments
         self.play(Create(segments), run_time=2)
         self.wait(1)
         
         self.play(Write(dq_label))
-
-        # Add center point
-        self.play(Create(center_dot))
         
         self.play(
             Transform(segments[0], highlighted_segments[0]),
@@ -425,15 +466,89 @@ class ChargedRing(Scene):
         )
         self.wait(2)
 
-        # Fade out everything
-        self.play(
-            FadeOut(ring),
-            FadeOut(charges),
-            FadeOut(segments),
-            FadeOut(e_field_vectors),
-            FadeOut(center_dot),
-            FadeOut(formula),
-            FadeOut(dq_label)
-        )
+                # Now illustrate diametrically opposite dQ and their electric fields
+        # Indicate pairs of opposite electric field vectors
+        for i in range(num_segments // 2):  # Loop through pairs of opposite segments
+            self.play(
+                Indicate(VGroup(e_field_vectors[i], e_field_vectors[i + num_segments // 2])),
+                run_time=1
+            )
+        self.wait(2)
+            
+class DChargedRing(Scene):
+    def construct(self):
+        
+        # Ring parameters
+        ring_radius = 1.2
+        gap_between_rings = 4  # Distance between rings
+        ring_center_top = LEFT * 3.5 + UP * 1.5  # Center of the top row of rings
+        ring_center_bottom = LEFT * 3.5 + DOWN * 2.5  # Center of the bottom row of rings
+        
+        # Number of charges on the rings (odd top, even bottom)
+        num_charges_top = [3, 5, 7]  # Odd number of charges on top rings
+        num_charges_bottom = [4, 6, 8]  # Even number of charges on bottom rings
+        
+        # Groups for charges, electric field vectors, and rings
+        charges_top = VGroup()
+        charges_bottom = VGroup()
+        e_field_vectors_top = VGroup()
+        e_field_vectors_bottom = VGroup()
+        rings = VGroup()
+        charge_labels_top = VGroup()  # To display the number of charges on top of each ring
+        charge_labels_bottom = VGroup()  # To display the number of charges on top of each ring
+
+        # Create rings and charges for the top row
+        for j, num_charges in enumerate(num_charges_top):
+            ring = Circle(radius=ring_radius, color=BLUE).shift(ring_center_top + RIGHT * j * gap_between_rings)
+            rings.add(ring)
+
+            # Label the number of charges
+            charge_label = MathTex(f"n = {num_charges}", color=WHITE).scale(0.6)
+            charge_label.next_to(ring,UP)
+            charge_labels_top.add(charge_label)
+
+            for i in range(num_charges):
+                angle = i * 2 * PI / num_charges
+                charge = MathTex(r"\boldsymbol{+}", color=RED, stroke_width=2).scale(0.6)
+                charge.move_to(ring_center_top + np.array([np.cos(angle), np.sin(angle), 0]) * ring_radius + RIGHT * j * gap_between_rings)
+                charges_top.add(charge)
+                
+                # Electric field vector for each charge
+                vector_end = ring_center_top + np.array([0.7 * ring_radius * np.cos(angle), 0.7 * ring_radius * np.sin(angle), 0]) + RIGHT * j * gap_between_rings
+                e_field = Arrow(ring_center_top + RIGHT * j * gap_between_rings, vector_end, buff=0, color=RED, max_tip_length_to_length_ratio=0.15)
+                e_field_vectors_top.add(e_field)
+
+        # Create rings and charges for the bottom row
+        for j, num_charges in enumerate(num_charges_bottom):
+            ring = Circle(radius=ring_radius, color=BLUE).shift(ring_center_bottom + RIGHT * j * gap_between_rings)
+            rings.add(ring)
+
+            # Label the number of charges
+            charge_label = MathTex(f"n = {num_charges}", color=WHITE).scale(0.6)
+            charge_label.next_to(ring,UP)
+            charge_labels_bottom.add(charge_label)
+
+            for i in range(num_charges):
+                angle = i * 2 * PI / num_charges
+                charge = MathTex(r"\boldsymbol{+}", color=RED, stroke_width=2).scale(0.6)
+                charge.move_to(ring_center_bottom + np.array([np.cos(angle), np.sin(angle), 0]) * ring_radius + RIGHT * j * gap_between_rings)
+                charges_bottom.add(charge)
+                
+                # Electric field vector for each charge
+                vector_end = ring_center_bottom + np.array([0.7 * ring_radius * np.cos(angle), 0.7 * ring_radius * np.sin(angle), 0]) + RIGHT * j * gap_between_rings
+                e_field = Arrow(ring_center_bottom + RIGHT * j * gap_between_rings, vector_end, buff=0, color=RED, max_tip_length_to_length_ratio=0.15)
+                e_field_vectors_bottom.add(e_field)
+
+        # Display the rings, charges, and labels
+        self.play(Create(rings))
+        self.play(FadeIn(charges_top), FadeIn(charges_bottom))
+        self.play(Write(charge_labels_top), Write(charge_labels_bottom))
+        self.wait(1)
+        
+        # Show electric field vectors for the top charges (odd charges)
+        self.play(Create(e_field_vectors_bottom), run_time=3)
         self.wait(1)
 
+        # Show electric field vectors for the bottom charges (even charges)
+        self.play(Create(e_field_vectors_top), run_time=3)
+        self.wait(1)
