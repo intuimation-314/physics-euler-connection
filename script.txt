@@ -11,23 +11,23 @@
 
 \section*{Introduction to the Problem}
 
-Imagine a block on a frictionless surface being pulled in one direction. According to Newton's laws, the block accelerates in that direction. But if you apply an equal force in the opposite direction, the forces cancel out and the block stays still. Notice the two forces making an angle of \( \frac{2\pi}{2} \), which is \( \pi \) radians.
+Imagine a block on a frictionless surface being pulled in one direction. According to Newton's laws, the block accelerates in that direction. But what happens if you apply an equal force in the opposite direction? The forces cancel out, and the block stays still. In this case, the block is in equilibrium. The two forces acting on it form an angle of \( \frac{2\pi}{2} \), which is \( \pi \) radians or 180 degrees, dividing the circle into two equal parts.
 
-Now, let’s take it a step further. What if we have three forces, each separated by \( \frac{2\pi}{3} \) radians? Adding these vectors can be a bit tricky, but we can use the parallelogram law of vector addition: if you think of two vectors at a point as adjacent sides of a parallelogram, the resultant is given by the diagonal. In this case, you’ll see that the resultant is equal and opposite to the third force.
+Now, let’s take it a step further. What if we have three forces? How can we achieve equilibrium with these three forces acting on the block? To do this, we arrange each force such that these three forces divide the circle into 3 equal parts, meaning each force makes an angle of \( \frac{2\pi}{3} \) radians. Let’s verify this arrangement by adding the vectors. We can use the \textbf{parallelogram law of vector addition}: when two vectors are adjacent sides of a parallelogram, the resultant vector is represented by the diagonal. By extending this principle to three forces, we can see that the sum of the first two forces creates a resultant force. The third force will exactly cancel out this resultant, putting the block in equilibrium.
 
-Similarly, with four forces making an angle of \( \frac{\pi}{2} \), they cancel each other out because each force has an opposite to cancel it.
+Next, let’s consider the case with four forces. If the forces are evenly spaced, each force will make an angle of \( \frac{\pi}{2} \) radians (90 degrees) with the next. Each force has an opposite counterpart, which cancels out the other. So, just like in the previous cases, the system is in equilibrium.
 
-This rule works for any number of forces—5, 6, or 7—as long as there's more than one. If there's only one force, there's nothing to balance it out. So it does not apply.
+This idea works for any number of forces—whether it's 5, 6, or 7 forces—so long as they’re evenly spaced around a circle and greater than one. if there’s only one force, there’s no balancing force to cancel it out, and equilibrium cannot be achieved.
 
-Here is a problem I want to address in this video: Picture this: you have \( n \) vectors, all of the same length, spreading out from a central point and evenly spaced around a circle. Each one makes an angle of \( \frac{2\pi}{n} \) radians with the next. The big question is: what’s the resultant sum of all these vectors?
+Here is a problem I want to address: Picture this: you have \( n \) vectors grater than one, all of the same magnitude, spreading out from a central point and evenly spaced around a circle. Each one makes an angle of \( \frac{2\pi}{n} \) radians with the next. The big question is: what’s the resultant sum of all these vectors?
 
-You might already know that because of their symmetrical arrangement, these vectors perfectly cancel each other out, resulting in a sum of zero. But just saying "symmetry" doesn't really give us a full explanation of why the sum is zero. Let’s break it down and see what’s really going on here.
+So far we know these vectors perfectly cancel each other out, resulting in a sum of zero. But why these forces cancel out? Many text book explanation simply says its "symmetry." But just saying "symmetry" doesn't really give us a full explanation of why the sum is zero. One way to get a better grasp of this is by picturing the vectors being shifted, without changing their angles, so that the tail of one connects to the head of another. When you do this, they form a closed polygon, which is why the resultant sum is zero. It’s a cool way to visualize the concept. But Mathematicians are not quite convinced with these type of visual explanations.
 
-One way to get a better grasp of this is by picturing the vectors being shifted, without changing their angles, so that the tail of one connects to the head of another. When you do this, they form a closed polygon, which is why the resultant sum is zero. It’s a cool way to visualize the concept. But the goal of this video isn’t just to give you a feel for the problem. If you dig a little deeper and start asking why this works for any number of vectors, you’ll discover that Euler’s formula—one of the most beautiful theorems in mathematics—offers an elegant proof that you might not see in your textbooks.
+The goal of this video is to provide the mathematical proof behind this phenomenon. There is a beautiful and elegant proof offered by the beautiful theorem Euler’s formula that you might not encounter in typical textbooks.
 
 It might seem surprising that such an abstract concept like Euler’s Formula can prove something so practical in physics, but trust me, this video is going to be exciting. We’re about to explore one of the most beautiful connections between math and physics.
 
-To make this concept more concrete, let's look at another specific example. I'll start with how I first encountered this problem in my physics class.
+I'll start with how I first encountered this problem in my high school physics class.
 
 \section*{Example encountered in Physics}
 
@@ -64,8 +64,6 @@ Similarly, the \( y \)-component represents the projection along the \( y \)-axi
 \[
 \text{y-component} = \sin\left(\theta_k\right) \hat{j}
 \]
-
-Decomposing a vector into these components is useful because it lets us sum the vectors by adding their x-components and y-components separately, simplifying the calculation of the resultant vector.
 
 Here, the angle \(\theta_k\) can be expressed as a function of the vector index \(k\), for each vector. Since each vector is evenly spaced around a circle, the angle between consecutive vectors is \(\frac{2\pi}{n}\):
 
@@ -110,7 +108,9 @@ To prove that the vector sum is zero, we need to show that both the sum of the x
 \sin\left(\frac{2k\pi}{n}\right) = 0
 \]
 
-This is a sub-problem within our original problem, and directly proving these sums are zero using trigonometric identities can be complex and tedious. Here, Euler's formula provides an elegant solution.
+This is a crucial sub-problem within the broader problem we're addressing. But how do we prove that these sums are zero at the same time? In a typical math class, you might encounter this kind of problem to solve. If we just look at it, it may seem abstract, and one might ask, "Why is this useful?"
+
+What I love about physics is that it shows you where the problem actually originates from. In this case, solving this can be incredibly useful, especially when it comes to understanding the sum of vectors. While there might be some trigonometric methods to prove this, they would likely be complex and tedious. This is where Euler's formula comes in. It simplifies the process and provides a beautiful proof, which is the key point I want to focus on in my video today.
 
 If you clicked on this video, you probably already have a basic understanding of Euler's Formula. I won’t dive deep into the details since I’ve covered it in my earlier videos in this playlist. For now, let me give you a quick overview. Picture a point in a complex plane that is a unit distance away from the origin making an angle \(\theta\) with the x-axis. It represents a complex number with real part \(\cos(\theta)\) and imaginary part \(\sin(\theta)\). According to Euler's Formula, this complex number can also be written in an exponential form:
 
@@ -232,25 +232,8 @@ The summation:
 can be transformed into an integral as \( n \to \infty \):
 
 \[
-\int_0^{n-1} e^{i\frac{2k\pi}{n}} \, dk.
-\]
-
-Since \( n-1 \approx n \) for large \( n \), we can extend the limits of integration to:
-
-\[
-\int_0^{n} e^{i\frac{2k\pi}{n}} \, dk.
-\]
-
-As \( n \to \infty \), the discrete angles \( \frac{2k\pi}{n} \) become a continuous variable \( \theta \), ranging from \( 0 \) to \( 2\pi \). Substituting this transformation:
-
-\[
-\theta = \frac{2\pi}{n}k, \quad d\theta = \frac{2\pi}{n} \, dk, \quad dk = \frac{n}{2\pi} \, d\theta.
-\]
-
-The integral becomes:
-
-\[
-\int_0^n e^{i\frac{2k\pi}{n}} \, dk = \frac{n}{2\pi} \int_0^{2\pi} e^{i\theta} \, d\theta.
+\lim_{n \to \infty} \sum_{k=0}^{n-1} e^{i\frac{2k\pi}{n}}
+= \frac{n}{2\pi} \int_0^{2\pi} e^{i\theta} \, d\theta.
 \]
 
 To evaluate the integral, use the antiderivative of \( e^{i\theta} \):
@@ -295,23 +278,25 @@ For my programming friends who might not prefer this detailed proof, or for anyo
 import numpy as np
 
 def vector_sum(n):
-    # Define each angle in radians, evenly spaced around the circle
-    angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
-    # Calculate x and y components of each vector
-    x_components = np.cos(angles)
-    y_components = np.sin(angles)
-    # Sum up the x and y components
-    total_x = np.sum(x_components)
-    total_y = np.sum(y_components)
-    # Resultant vector sum
-    return total_x, total_y
+    # Initialize x and y components to 0
+    x_component, y_component = 0, 0
+    
+    # Sum up the x and y components of all vectors
+    for k in range(n):
+        angle = 2 * k * np.pi / n  # Calculate angle for each vector
+        x_component += np.cos(angle)  # Sum x components
+        y_component += np.sin(angle)  # Sum y components
+    
+    # Return the rounded resultant vector sum (x, y components)
+    return round(x_component, 2), round(y_component, 2)
 
 # Example with 12 vectors (you can change n to test different values)
 n = 12
 result = vector_sum(n)
-print(f"Resultant vector sum: ({result[0]:.2e}, {result[1]:.2e})")
+print(f"Resultant vector sum: ({result[0]}, {result[1]})")
 
 # Expected output should be close to (0, 0) for any n > 1
+
 \end{verbatim}
 
 The code calculates the sum of \( n \) unit vectors evenly spaced around a circle. By setting `n = 12`, you should see the result as nearly (0, 0), confirming that the vectors balance out as expected. You can change `n` to any positive integer greater than 1 to explore the effect of different numbers of vectors.

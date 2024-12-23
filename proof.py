@@ -705,3 +705,49 @@ print(f"Resultant vector sum: ({result[0]:.2e}, {result[1]:.2e})")
         self.wait(1)
         self.play(Create(code_display))
         self.wait(2)
+
+class VectorSumCode1(Scene):
+    def construct(self):
+        # Title Text
+        title = Text("Computational Verification of Vector Sum", gradient=[BLUE, GREEN]).move_to(2.6 * UP).scale(0.7)
+        self.add(title)
+
+        # Code snippet to be displayed
+        code_snippet = """
+import numpy as np
+
+def vector_sum(n):
+    # Initialize x and y components to 0
+    x_component, y_component = 0, 0
+    
+    # Sum up the x and y components of all vectors
+    for k in range(n):
+        angle = 2 * k * np.pi / n  # Calculate angle for each vector
+        x_component += np.cos(angle)  # Sum x components
+        y_component += np.sin(angle)  # Sum y components
+    
+    # Return the rounded resultant vector sum (x, y components)
+    return round(x_component, 2), round(y_component, 2)
+
+# Example with 12 vectors (you can change n to test different values)
+n = 12
+result = vector_sum(n)
+print(f"Resultant vector sum: ({result[0]}, {result[1]})")
+
+# Expected output should be close to (0, 0) for any n > 1
+"""
+        # Display code snippet at the bottom
+        code_display = Code(
+            code=code_snippet,
+            font_size=24,
+            language="python",
+            style="monokai",  # Using the style directly
+            tab_width=4,
+            insert_line_no=False,
+            line_spacing=0.6
+        ).scale(0.6).next_to(title, DOWN, buff=0.5)
+
+        self.play(Write(title))
+        self.wait(1)
+        self.play(Create(code_display))
+        self.wait(2)
