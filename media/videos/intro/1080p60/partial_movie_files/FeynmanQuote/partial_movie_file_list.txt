@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/FeynmanQuote/3529212410_1722979919_223132457.mp4'
+file 'file:C:/Users/Sumit Sah/Desktop/Manim Projects/physics-euler-connection/media/videos/intro/1080p60/partial_movie_files/FeynmanQuote/3040924799_2475379470_1123724256.mp4'

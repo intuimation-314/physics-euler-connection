@@ -552,3 +552,39 @@ class DChargedRing(Scene):
         # Show electric field vectors for the bottom charges (even charges)
         self.play(Create(e_field_vectors_top), run_time=3)
         self.wait(1)
+
+
+
+class FeynmanQuote(Scene):
+    def construct(self):
+        # Define the quote text
+        quote = Tex(
+            "You can recognize truth by its beauty and simplicity.\\\\",
+            "When you get it right, it is obvious that it is right\\\\",
+            "– at least if you have any experience – because usually\\\\",
+            "what happens is that more comes out than goes in.",
+            font_size=36,
+            tex_environment="flushleft"  # Aligns text to the left
+        )
+        
+                # Add the author's name below the quote
+        author = Text("– Richard Feynman", font_size=32, slant=ITALIC, color=BLUE)
+        author.next_to(quote, DOWN, buff=0.5)
+
+        # Set color for specific keywords
+        quote.set_color_by_tex("truth", YELLOW)
+        quote.set_color_by_tex("beauty", GREEN)
+        quote.set_color_by_tex("simplicity", BLUE)
+        quote.set_color_by_tex("experience", TEAL)
+        quote.set_color_by_tex("more comes out", RED)
+
+        # Center the quote and position to the left
+        quote.move_to(2 * LEFT)
+
+        # Add an image of Feynman
+        image = ImageMobject("feynman.jpg").scale(0.6)
+        image.next_to(quote, RIGHT, buff=0.6)
+
+        # Display the quote and image
+        self.play(Write(quote), Write(author), FadeIn(image), run_time=2)
+        self.wait(3)
